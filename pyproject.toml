@@ -9,6 +9,7 @@ dependencies = [
     "cryptography>=47.0.0",
     "elasticsearch[async]>=8,<9",
     "fastapi[standard]>=0.136.1",
+    "greenlet>=3.5.0",
     "jieba>=0.42.1",
     "langchain>=1.2.17",
     "langchain-huggingface>=1.2.2",

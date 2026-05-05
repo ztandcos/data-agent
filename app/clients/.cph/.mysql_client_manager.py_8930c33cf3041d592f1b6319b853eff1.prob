@@ -1,0 +1,1 @@
+{"name":"Local: mysql_client_manager","url":"/Users/shaw/workspace/Agent/data-agent/app/clients/mysql_client_manager.py","tests":[{"id":1777941391615,"input":"","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"/Users/shaw/workspace/Agent/data-agent/app/clients/mysql_client_manager.py","group":"local","local":true}
