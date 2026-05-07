@@ -23,3 +23,13 @@
 2026-05-05 16:05:53.238 | INFO     | __main__:build:6 - Building...
 2026-05-05 16:05:58.470 | INFO     | __main__:build:6 - Building...
 2026-05-05 16:07:14.265 | INFO     | __main__:build:7 - Building...
+2026-05-07 11:31:49.077 | INFO     | app.services.meta_knowledge_service:build:190 - 加载配置文件成功
+2026-05-07 11:31:49.242 | INFO     | app.services.meta_knowledge_service:build:198 - 保存表信息和字段信息到meta数据库成功
+2026-05-07 11:32:20.580 | INFO     | app.services.meta_knowledge_service:build:203 - 为字段信息建立向量索引成功
+2026-05-07 11:32:20.750 | INFO     | app.services.meta_knowledge_service:build:207 - 为指定的维度字段取值建立全文索引成功
+2026-05-07 11:43:43.281 | INFO     | app.services.meta_knowledge_service:build:190 - 加载配置文件成功
+2026-05-07 11:43:43.428 | INFO     | app.services.meta_knowledge_service:build:198 - 保存表信息和字段信息到meta数据库成功
+2026-05-07 11:44:21.104 | INFO     | app.services.meta_knowledge_service:build:203 - 为字段信息建立向量索引成功
+2026-05-07 11:44:21.318 | INFO     | app.services.meta_knowledge_service:build:207 - 为指定的维度字段取值建立全文索引成功
+2026-05-07 11:44:21.329 | INFO     | app.services.meta_knowledge_service:build:214 - 保存指标信息到数据库成功
+2026-05-07 11:44:24.422 | INFO     | app.services.meta_knowledge_service:build:218 - 为指标信息建立向量索引成功
