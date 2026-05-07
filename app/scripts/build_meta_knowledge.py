@@ -1,0 +1,51 @@
+import asyncio,sys,argparse
+# print(sys.path)
+from app.core.log import logger
+from pathlib import Path
+from app.services.meta_knowledge_service import MetaKnowledgeService
+from app.repositories.mysql.meta.meta_mysql_repository import MetaMySQLRespository
+from app.clients.mysql_client_manager import meta_mysql_client_manager,dw_mysql_client_manager
+from app.repositories.mysql.dw.dw_mysql_repository import DWMySQLRepository
+from app.clients.qdrant_client_manager import qdrant_client_manager
+from app.repositories.qdrant.column_qdrant_repository import ColumnQdrantRepository
+from app.clients.embedding_client_manager import embedding_client_manager
+from app.clients.es_client_manager import es_client_manager
+from app.repositories.es.value_es_repository import ValueESRepository
+
+
+
+async def build(config_path:Path):
+    meta_mysql_client_manager.init()
+    dw_mysql_client_manager.init()
+    qdrant_client_manager.init()
+    embedding_client_manager.init()
+    es_client_manager.init()
+    
+    async with meta_mysql_client_manager.session_factory() as session, dw_mysql_client_manager.session_factory() as dw_session:
+        meta_mysql_repository = MetaMySQLRespository(session)
+        dw_mysql_repository = DWMySQLRepository(dw_session)
+
+        column_qdrant_repository  = ColumnQdrantRepository(qdrant_client_manager.client)
+
+        value_es_repository = ValueESRepository(es_client_manager.client)
+
+        meta_knowledge_service = MetaKnowledgeService(meta_mysql_repository = meta_mysql_repository,
+                                                      dw_mysql_repository = dw_mysql_repository,
+                                                      column_qdrant_repository = column_qdrant_repository,
+                                                      embedding_client=embedding_client_manager.client,
+                                                      value_es_repository = value_es_repository)
+        await meta_knowledge_service.build(config_path)
+    
+    await meta_mysql_client_manager.close()
+    await dw_mysql_client_manager.close()
+    await qdrant_client_manager.close()
+    await es_client_manager.close()
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-c', '--conf') 
+    
+    args = parser.parse_args()
+    config_path = args.conf
+    # print(config_path)
+    asyncio.run(build(Path(config_path)))    
