@@ -14,3 +14,6 @@ docker/embedding/bge-large-zh-v1.5/
 
 # Downloaded Elasticsearch plugin artifacts
 docker/elasticsearch/plugins/*.zip
+
+# Deepseek API key
+.env

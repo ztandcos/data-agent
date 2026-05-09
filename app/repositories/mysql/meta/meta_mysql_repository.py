@@ -7,8 +7,11 @@ from app.entities.metric_info import MetricInfo
 from app.repositories.mysql.meta.mappers.metric_info_mapper import MetricInfoMapper
 from app.entities.column_metric import ColumnMetric
 from app.repositories.mysql.meta.mappers.column_metric_mapper import ColumnMetricMapper
+from app.models.column_info import ColumnInfoMySQL
+from app.models.table_info import TableInfoMySQL
+from sqlalchemy import text
 
-class MetaMySQLRespository:
+class MetaMySQLRepository:
     def __init__(self,session:AsyncSession):
         self.session = session
     
@@ -23,3 +26,22 @@ class MetaMySQLRespository:
 
     def save_column_metrics(self,column_metrics:list[ColumnMetric]):
         self.session.add_all([ColumnMetricMapper.to_model(column_metric) for column_metric in column_metrics])
+
+    async def get_column_info_by_id(self,id: str)->ColumnInfo | None:
+        column_info: ColumnInfoMySQL | None = await self.session.get(ColumnInfoMySQL,id)
+        if column_info:
+            return ColumnInfoMapper.to_entity(column_info)
+        else:
+            raise None
+
+    async def get_table_info_by_id(self,id: str)->TableInfo |None:
+        table_info: TableInfoMySQL | None = await self.session.get(TableInfoMySQL,id)
+        if table_info:
+            return TableInfoMapper.to_entity(table_info)
+        else:
+            raise None
+        
+    async def get_key_columns_by_table_id(self,table_id: str)->list[ColumnInfo] | None:
+        sql = "select * from column_info where table_id = :table_id and role in ('primary_key','foreign_key')" 
+        result = await self.session.execute(text(sql),{"table_id":table_id})
+        return [ColumnInfo(**dict(row)) for row in result.mappings().fetchall()]

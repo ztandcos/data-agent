@@ -36,6 +36,7 @@ class MysqlClientManager:
         if self.engine is not None:
             await self.engine.dispose()
             self.engine = None
+            self.session_factory = None
 
     async def ping(self) -> int:
         if self.engine is None:
@@ -56,7 +57,10 @@ dw_mysql_client_manager = MysqlClientManager(app_config.db_dw)
 if __name__ == "__main__":
     dw_mysql_client_manager.init()
     async def test():
-        result = await dw_mysql_client_manager.ping()
-        print(f"Connection successful! Ping result: {result}")
+        try:
+            result = await dw_mysql_client_manager.ping()
+            print(f"Connection successful! Ping result: {result}")
+        finally:
+            await dw_mysql_client_manager.close()
 
     asyncio.run(test())
