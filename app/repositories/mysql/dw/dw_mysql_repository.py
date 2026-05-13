@@ -31,7 +31,7 @@ class DWMySQLRepository:
 
     async def validate(self,sql: str):
         sql = f"explain {sql}"
-        await self.session.execute(sql)
+        await self.session.execute(text(sql))
 
 
     async def run(self,sql: str) -> list[dict]:

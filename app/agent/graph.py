@@ -79,7 +79,7 @@ if __name__ == "__main__":
                 metric_qdrant_repository = MetricQdrantRepository(qdrant_client_manager.client)
                 value_es_repository = ValueESRepository(es_client_manager.client)
 
-                state = DataAgentState(query="统计华北地区的销售总额", error=None)
+                state = DataAgentState(query="统计华北地区的销售总额")
                 context = DataAgentContext(column_qdrant_repository=column_qdrant_repository,
                                            embedding_client=embedding_client_manager.client,
                                            metric_qdrant_repository=metric_qdrant_repository,
@@ -92,5 +92,6 @@ if __name__ == "__main__":
             await qdrant_client_manager.close()
             await es_client_manager.close()
             await meta_mysql_client_manager.close()
+            await dw_mysql_client_manager.close()
     asyncio.run(test())
             

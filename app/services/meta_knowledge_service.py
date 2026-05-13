@@ -3,7 +3,7 @@ from app.clients.embedding_client_manager import TextEmbeddingsInferenceEmbeddin
 from pathlib import Path
 from omegaconf import OmegaConf
 from app.conf.meta_config import MetaConfig
-from app.repositories.mysql.meta.meta_mysql_repository import MetaMySQLRespository
+from app.repositories.mysql.meta.meta_mysql_repository import MetaMySQLRepository
 from app.repositories.mysql.dw.dw_mysql_repository import DWMySQLRepository
 from app.entities.table_info import TableInfo
 from app.entities.column_info import ColumnInfo
@@ -19,14 +19,14 @@ from app.core.log import logger
 
 
 class MetaKnowledgeService:
-    def __init__(self,meta_mysql_repository:MetaMySQLRespository,
+    def __init__(self,meta_mysql_repository:MetaMySQLRepository,
                  dw_mysql_repository:DWMySQLRepository,
                  column_qdrant_repository:ColumnQdrantRepository,
                  embedding_client:TextEmbeddingsInferenceEmbeddings,
                  value_es_repository:ValueESRepository,
                  metric_qdrant_repository:MetricQdrantRepository):
         
-        self.meta_mysql_repository : MetaMySQLRespository = meta_mysql_repository
+        self.meta_mysql_repository : MetaMySQLRepository = meta_mysql_repository
         self.dw_mysql_repository : DWMySQLRepository = dw_mysql_repository
         self.column_qdrant_repository : ColumnQdrantRepository = column_qdrant_repository
         self.embedding_client:TextEmbeddingsInferenceEmbeddings = embedding_client
@@ -216,4 +216,3 @@ class MetaKnowledgeService:
             # 3.2 对指标信息建立向量索引
             await self._save_metrics_to_qdrant(metric_infos)        
             logger.info("为指标信息建立向量索引成功")
-

@@ -32,14 +32,14 @@ class MetaMySQLRepository:
         if column_info:
             return ColumnInfoMapper.to_entity(column_info)
         else:
-            raise None
+            return None
 
     async def get_table_info_by_id(self,id: str)->TableInfo |None:
         table_info: TableInfoMySQL | None = await self.session.get(TableInfoMySQL,id)
         if table_info:
             return TableInfoMapper.to_entity(table_info)
         else:
-            raise None
+            return None
         
     async def get_key_columns_by_table_id(self,table_id: str)->list[ColumnInfo] | None:
         sql = "select * from column_info where table_id = :table_id and role in ('primary_key','foreign_key')" 

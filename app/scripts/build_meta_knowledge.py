@@ -3,7 +3,7 @@ import asyncio,sys,argparse
 from app.core.log import logger
 from pathlib import Path
 from app.services.meta_knowledge_service import MetaKnowledgeService
-from app.repositories.mysql.meta.meta_mysql_repository import MetaMySQLRespository
+from app.repositories.mysql.meta.meta_mysql_repository import MetaMySQLRepository
 from app.clients.mysql_client_manager import meta_mysql_client_manager,dw_mysql_client_manager
 from app.repositories.mysql.dw.dw_mysql_repository import DWMySQLRepository
 from app.clients.qdrant_client_manager import qdrant_client_manager
@@ -23,7 +23,7 @@ async def build(config_path:Path):
     es_client_manager.init()
     
     async with meta_mysql_client_manager.session_factory() as session, dw_mysql_client_manager.session_factory() as dw_session:
-        meta_mysql_repository = MetaMySQLRespository(session)
+        meta_mysql_repository = MetaMySQLRepository(session)
         dw_mysql_repository = DWMySQLRepository(dw_session)
 
         column_qdrant_repository  = ColumnQdrantRepository(qdrant_client_manager.client)

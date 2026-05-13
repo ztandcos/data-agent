@@ -11,20 +11,26 @@ from app.core.log import logger
 async def filter_metric(state:DataAgentState,runtime:Runtime[DataAgentContext]):
 
     writer= runtime.stream_writer
-    writer("过滤指标")
+    writer({"type": "progress","step": "过滤指标信息","status": "running"})
 
-    query = state["query"]
-    metric_infos: list[MetricInfoState] = state["metric_infos"]
+    try:
+        query = state["query"]
+        metric_infos: list[MetricInfoState] = state["metric_infos"]
 
-    prompt = PromptTemplate(template= load_prompt("filter_metric_info"),
-                            input_variables=[],)
-    output_parser = JsonOutputParser()
-    chain = prompt|llm|output_parser
+        prompt = PromptTemplate(template= load_prompt("filter_metric_info"),
+                                input_variables=[],)
+        output_parser = JsonOutputParser()
+        chain = prompt|llm|output_parser
 
-    result = await chain.ainvoke({"query":query,
-                                  "metric_infos":yaml.dump(metric_infos,allow_unicode=True,sort_keys=False)})
-    
-    filter_metric_infos = [metric_info for metric_info in metric_infos if metric_info["name"] in result]
+        result = await chain.ainvoke({"query":query,
+                                      "metric_infos":yaml.dump(metric_infos,allow_unicode=True,sort_keys=False)})
+        
+        filter_metric_infos = [metric_info for metric_info in metric_infos if metric_info["name"] in result]
 
-    logger.info(f"过滤后的指标信息:{[filter_metric_info["name"] for filter_metric_info in filter_metric_infos]}")
-    return {"metric_infos":filter_metric_infos}
+        writer({"type": "progress","step": "过滤指标信息","status": "success"})
+        logger.info(f"过滤后的指标信息:{[filter_metric_info["name"] for filter_metric_info in filter_metric_infos]}")
+        return {"metric_infos":filter_metric_infos}
+    except Exception as e:
+        logger.error(f"过滤指标失败:{e}")
+        writer({"type": "progress","step": "过滤指标信息","status": "error"})
+        raise
